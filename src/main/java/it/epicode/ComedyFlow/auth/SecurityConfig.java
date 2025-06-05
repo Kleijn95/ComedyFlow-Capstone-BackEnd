@@ -33,8 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // ✅ Abilita CORS da CorsConfig
-                .and()
+
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         //.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -57,20 +56,5 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    }}
 
-    // ✅ CORS config locale se vuoi integrarla direttamente qui
-    @Bean
-    public WebMvcConfigurer corsConfigurerSecurity() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOriginPatterns("*") // <-- questo va con allowCredentials!
-                        .allowedMethods("*")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
-        };
-    }
-}

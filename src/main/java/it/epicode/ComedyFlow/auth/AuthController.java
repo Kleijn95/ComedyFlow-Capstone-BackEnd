@@ -75,11 +75,22 @@ public class AuthController {
         // Invia email di verifica
         String link = "http://localhost:8080/api/auth/verify?code=" + user.getEmailVerificationCode();
         String html = """
-        <h3>Benvenuto su ComedyFlow!</h3>
-        <p>Per completare la registrazione, verifica la tua email cliccando sul link qui sotto:</p>
-        <a href="%s" style="display:inline-block;padding:10px 20px;background-color:#28a745;color:white;border-radius:5px;text-decoration:none;">Verifica email</a>
-        <p>Oppure copia questo link nel browser:<br>%s</p>
-    """.formatted(link, link);
+<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;background-color:#ffffff;border-radius:10px;padding:30px;text-align:center;box-shadow:0 0 10px rgba(0,0,0,0.1);">
+    <img src="https://res.cloudinary.com/dfqmrqlcj/image/upload/v1749050039/logo_s3ewak.png" alt="ComedyFlow Logo" style="width:120px;margin-bottom:20px;" />
+    <h2 style="color:#4b4b4b;">Benvenuto su <span style="color:#4fa1ff;">Comedy</span><span style="color:#a77ff7;">Flow</span>!</h2>
+    <p style="color:#555;font-size:16px;margin:20px 0;">
+        Siamo felici di averti con noi!<br />
+        Per completare la tua registrazione, clicca sul pulsante qui sotto per verificare la tua email.
+    </p>
+    <a href="%s" style="display:inline-block;padding:14px 28px;background-color:#28a745;color:#ffffff;font-weight:bold;border-radius:5px;text-decoration:none;margin:20px 0;">Verifica Email</a>
+    <p style="color:#888;font-size:14px;margin-top:30px;">
+        Se il bottone non funziona, copia e incolla questo link nel tuo browser:<br />
+        <a href="%s" style="color:#4fa1ff;">%s</a>
+    </p>
+    <p style="color:#ccc;font-size:12px;margin-top:40px;">© 2025 ComedyFlow - Tutti i diritti riservati</p>
+</div>
+""".formatted(link, link, link);
+
 
         emailSenderService.sendEmail(request.getEmail(), "Verifica la tua email", html);
 

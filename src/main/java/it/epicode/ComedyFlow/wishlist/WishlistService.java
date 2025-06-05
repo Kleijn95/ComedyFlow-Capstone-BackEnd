@@ -13,9 +13,15 @@ public class WishlistService {
 
     @Autowired
     private WishlistRepository wishlistRepository;
-    @Autowired private UtenteRepository utenteRepository;
-    @Autowired private EventoRepository eventoRepository;
-    @Autowired private ComicoRepository comicoRepository;
+
+    @Autowired
+    private UtenteRepository utenteRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
+
+    @Autowired
+    private ComicoRepository comicoRepository;
 
     public List<WishlistResponse> getWishlistByUtente(Long utenteId) {
         return wishlistRepository.findByUtenteId(utenteId).stream()
@@ -49,21 +55,50 @@ public class WishlistService {
                 .ifPresent(wishlistRepository::delete);
     }
 
+    // ✅ Classe statica per la mappatura
     public static class WishlistMapper {
         public static WishlistResponse toDto(Wishlist wishlist) {
             WishlistResponse dto = new WishlistResponse();
-            if (wishlist.getEvento() != null) {
-                dto.setEventoId(wishlist.getEvento().getId());
-                dto.setTitoloEvento(wishlist.getEvento().getTitolo());
-            }
-            if (wishlist.getComico() != null) {
-                dto.setComicoId(wishlist.getComico().getId());
-                dto.setNomeComico(wishlist.getComico().getNome() + " " + wishlist.getComico().getCognome());
-            }
             dto.setId(wishlist.getId());
             dto.setDataAggiunta(wishlist.getDataAggiunta());
+
+            // EVENTO
+            if (wishlist.getEvento() != null) {
+                var evento = wishlist.getEvento();
+                dto.setEventoId(evento.getId());
+                dto.setTitoloEvento(evento.getTitolo());
+                dto.setDescrizioneEvento(evento.getDescrizione());
+                dto.setDataEvento(evento.getDataOra());
+                dto.setPostiDisponibili(evento.getNumeroPostiDisponibili());
+                dto.setStatoEvento(evento.getStato());
+
+                // COMICO dell'evento
+                if (evento.getComico() != null) {
+                    var comico = evento.getComico();
+                    dto.setComicoId(comico.getId());
+                    dto.setNomeComico(comico.getNome());
+                    dto.setCognomeComico(comico.getCognome());
+                    dto.setAvatarComico(comico.getAvatar());
+                }
+
+                // LOCALE dell'evento
+                if (evento.getLocale() != null) {
+                    var locale = evento.getLocale();
+                    dto.setNomeLocale(locale.getNome());
+                    dto.setIndirizzoLocale(locale.getVia());
+                }
+            }
+
+            // COMICO SALVATO DIRETTAMENTE
+            if (wishlist.getComico() != null) {
+                var comico = wishlist.getComico();
+                dto.setComicoId(comico.getId());
+                dto.setNomeComico(comico.getNome());
+                dto.setCognomeComico(comico.getCognome());
+                dto.setAvatarComico(comico.getAvatar());
+            }
+
             return dto;
         }
     }
-
 }
