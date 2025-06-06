@@ -233,7 +233,7 @@ public class PrenotazioneService {
         r.setDataOraEvento(p.getEvento().getDataOra());
         r.setStatoEvento(p.getEvento().getStato() != null ? p.getEvento().getStato() : StatoEvento.IN_PROGRAMMA);
         r.setEventoId(p.getEvento().getId());
-
+r.setAvatar(p.getSpettatore().getAvatar());
         return r;
     }
 

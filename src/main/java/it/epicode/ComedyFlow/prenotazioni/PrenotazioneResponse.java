@@ -15,5 +15,6 @@ public class PrenotazioneResponse {
     private String nomeLocale;
     private StatoEvento statoEvento; // aggiungi questo campo
     private Long eventoId;
+    private String avatar; // URL dell'immagine
 
 }
