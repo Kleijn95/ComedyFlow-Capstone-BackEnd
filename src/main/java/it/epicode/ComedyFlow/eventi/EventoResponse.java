@@ -20,5 +20,6 @@ public class EventoResponse {
     private StatoEvento stato;
     private Long localeId;
     private Long comicoId;
+    private String locandina;
 
 }

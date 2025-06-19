@@ -52,6 +52,20 @@ public class CommonRunner implements CommandLineRunner {
         return username;
     }
 
+    List<String> locandine = List.of(
+            "https://images.unsplash.com/photo-1485686531765-ba63b07845a7?q=80&w=1167&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1531947044935-8599a939ab85?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://plus.unsplash.com/premium_photo-1663091120574-d87d12ff2753?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHB1YnxlbnwwfHwwfHx8MA%3D%3D",
+            "https://images.unsplash.com/photo-1538488881038-e252a119ace7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHB1YnxlbnwwfHwwfHx8MA%3D%3D",
+            "https://images.unsplash.com/photo-1511920357939-b0464e91583c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fHB1YnxlbnwwfHwwfHx8MA%3D%3D",
+            "https://images.unsplash.com/photo-1535045519217-79ea59ee90f3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fHB1YnxlbnwwfHwwfHx8MA%3D%3D",
+            "https://images.unsplash.com/photo-1608144252993-f33f23e9df9a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fHB1YnxlbnwwfHwwfHx8MA%3D%3D",
+            "https://images.unsplash.com/photo-1562259934-6e09f6a89a98?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTJ8fHB1YnxlbnwwfHwwfHx8MA%3D%3D",
+            "https://images.unsplash.com/photo-1490747335890-cdd9b1423325?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAwfHxwdWJ8ZW58MHx8MHx8fDA%3D"
+    );
+
+
     @Override
     public void run(String... args) {
         List<Comune> comuni = comuneRepo.findAll();
@@ -143,6 +157,7 @@ public class CommonRunner implements CommandLineRunner {
             e.setComico(comici.get(i % comici.size()));
             e.setLocale(locali.get(i % locali.size()));
             e.setStato(StatoEvento.TERMINATO);
+            e.setLocandina(locandine.get(i % locandine.size()));
             eventoRepo.save(e);
             eventi.add(e);
         }
@@ -156,9 +171,11 @@ public class CommonRunner implements CommandLineRunner {
             e.setComico(comici.get(i % comici.size()));
             e.setLocale(locali.get(i % locali.size()));
             e.setStato(StatoEvento.IN_PROGRAMMA);
+            e.setLocandina(locandine.get(i % locandine.size())); // 👈 Assegna locandina
             eventoRepo.save(e);
             eventi.add(e);
         }
+
         for (int i = 0; i < 3; i++) {
             Evento e = new Evento();
             e.setTitolo("Show Annullato " + (i + 1));
@@ -169,6 +186,7 @@ public class CommonRunner implements CommandLineRunner {
             e.setComico(comici.get(i % comici.size()));
             e.setLocale(locali.get(i % locali.size()));
             e.setStato(StatoEvento.ANNULLATO);
+            e.setLocandina(locandine.get(i % locandine.size()));
             eventoRepo.save(e);
             eventi.add(e);
         }

@@ -98,6 +98,7 @@ public class EventoService {
         evento.setNumeroPostiDisponibili(request.getNumeroPostiDisponibili());
         evento.setComico(comico);
         evento.setLocale(locale);
+        evento.setLocandina(request.getLocandina());
         evento.setStato(StatoEvento.IN_PROGRAMMA); // ✅ aggiunto
 
         eventoRepository.save(evento);
@@ -133,6 +134,8 @@ public class EventoService {
         evento.setNumeroPostiTotali(request.getNumeroPostiTotali());
         evento.setNumeroPostiDisponibili(request.getNumeroPostiDisponibili());
         evento.setComico(comico);
+        evento.setLocandina(request.getLocandina());
+
 
         if (isAdmin) {
             if (request.getLocaleId() == null) {
@@ -170,6 +173,7 @@ public class EventoService {
         r.setLocaleId(e.getLocale().getId());
         r.setStato(e.getStato()); // ✅ aggiunto
         r.setComicoId(e.getComico().getId());
+        r.setLocandina(e.getLocandina());
 
         return r;
     }

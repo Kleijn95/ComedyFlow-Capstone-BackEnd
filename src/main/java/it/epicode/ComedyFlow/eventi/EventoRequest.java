@@ -13,4 +13,6 @@ public class EventoRequest {
     private int numeroPostiTotali;
     private Long localeId;
     private Long comicoId;
+    private String locandina;
+
 }

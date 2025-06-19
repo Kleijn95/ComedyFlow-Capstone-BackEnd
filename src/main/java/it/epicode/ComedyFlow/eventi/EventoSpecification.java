@@ -1,6 +1,10 @@
 package it.epicode.ComedyFlow.eventi;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -8,37 +12,30 @@ public class EventoSpecification {
 
     public static Specification<Evento> filterBy(EventoFilterDto filter) {
         return (root, query, cb) -> {
-            Predicate predicate = cb.conjunction();
+            List<Predicate> predicates = new ArrayList<>();
 
-            if (filter.getProvincia() != null && !filter.getProvincia().isBlank()) {
-                predicate = cb.and(predicate,
-                        cb.equal(
-                                root.get("locale").get("comune").get("provincia").get("nome"),
-                                filter.getProvincia()
-                        ));
+            if (filter.getComico() != null && !filter.getComico().isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("comico").get("nome")), "%" + filter.getComico().toLowerCase() + "%"));
             }
 
-            if (filter.getComico() != null && !filter.getComico().isBlank()) {
-                String likePattern = "%" + filter.getComico().toLowerCase() + "%";
-                Predicate nomeMatch = cb.like(cb.lower(root.get("comico").get("nome")), likePattern);
-                Predicate cognomeMatch = cb.like(cb.lower(root.get("comico").get("cognome")), likePattern);
-                predicate = cb.and(predicate, cb.or(nomeMatch, cognomeMatch));
+            if (filter.getProvincia() != null && !filter.getProvincia().isEmpty()) {
+                predicates.add(cb.equal(root.get("locale").get("comune").get("provincia").get("nome"), filter.getProvincia()));
             }
 
             if (filter.getData() != null) {
-                predicate = cb.and(predicate,
-                        cb.equal(cb.function("DATE", LocalDate.class, root.get("dataOra")), filter.getData()));
+                predicates.add(cb.equal(cb.function("DATE", LocalDate.class, root.get("dataOra")), filter.getData()));
             }
 
-            if (filter.getComicoId() != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("comico").get("id"), filter.getComicoId()));
-            }
-
+            // 👇 Filtro per locale specifico, se presente
             if (filter.getLocaleId() != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("locale").get("id"), filter.getLocaleId()));
+                predicates.add(cb.equal(root.get("locale").get("id"), filter.getLocaleId()));
+            } else {
+                // 👇 Se non è un locale, mostra solo eventi IN_PROGRAMMA
+                predicates.add(cb.equal(root.get("stato"), StatoEvento.IN_PROGRAMMA));
             }
 
-            return predicate;
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
 }

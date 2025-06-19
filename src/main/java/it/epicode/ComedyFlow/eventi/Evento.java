@@ -43,5 +43,7 @@ public class Evento {
     @ManyToOne
     private Comico comico;
 
+    private String locandina;
+
 
 }
